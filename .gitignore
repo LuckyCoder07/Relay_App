@@ -1,0 +1,8 @@
+node_modules/
+.env
+.DS_Store
+dist/
+build/
+backend/node_modules/
+relay-frontend/node_modules/
+relay-frontend/dist/

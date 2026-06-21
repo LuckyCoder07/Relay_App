@@ -1,0 +1,8 @@
+{
+  "name": "relay-project",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix backend & npm run dev --prefix relay-frontend",
+    "install:all": "npm install --prefix backend && npm install --prefix relay-frontend"
+  }
+}
