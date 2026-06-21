@@ -28,17 +28,24 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 4000;
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB connected");
-    // Only listen if not running in a serverless environment like Netlify
-    if (process.env.NODE_ENV !== "production" || process.env.RENDER) {
-      app.listen(PORT, () => console.log(`Relay API running on http://localhost:${PORT}`));
-    }
-  })
-  .catch((err) => {
-    console.error("MongoDB connection failed:", err.message);
-  });
-
+// Export the app for serverless use (Netlify functions)
 module.exports = app;
+
+// Only start the HTTP server when running locally / on a traditional server
+if (process.env.NODE_ENV !== "production") {
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("MongoDB connected");
+      app.listen(PORT, () => console.log(`Relay API running on http://localhost:${PORT}`));
+    })
+    .catch((err) => {
+      console.error("MongoDB connection failed:", err.message);
+    });
+} else {
+  // In production (Netlify), still connect to Mongo but don't call listen()
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB connected (serverless)"))
+    .catch((err) => console.error("MongoDB connection failed:", err.message));
+}
