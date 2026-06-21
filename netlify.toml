@@ -1,17 +1,11 @@
 [build]
-  # Install frontend + backend deps, then build the frontend
   command = "cd relay-frontend && npm install && npm run build && cd ../backend && npm install --production"
   publish = "relay-frontend/dist"
   functions = "netlify/functions"
 
 [functions]
-  # Tell esbuild where to find backend node_modules
   node_bundler = "esbuild"
   included_files = ["backend/**"]
-
-[functions."api"]
-  node_bundler = "esbuild"
-  external_node_modules = ["mongoose", "express", "cors", "bcryptjs", "jsonwebtoken", "dotenv", "express-rate-limit", "serverless-http"]
 
 [[redirects]]
   from = "/api/*"
